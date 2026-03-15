@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 
-export default function AllocationsLayout() {
+export default function AccountLayout() {
   return (
     <Stack>
       <Stack.Screen
@@ -8,10 +8,10 @@ export default function AllocationsLayout() {
         options={{
           headerShown: true,
           headerLargeTitle: true,
-          headerTitle: "Allocations",
+
+          headerTitle: "Accounts",
         }}
       />
-      <Stack.Screen name="new" />
     </Stack>
   );
 }
