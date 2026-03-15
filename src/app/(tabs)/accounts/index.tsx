@@ -1,20 +1,8 @@
-import AccountListItem from "@/components/account-list-item";
 import AccountsList from "@/components/accounts-list";
-import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import {
-  BottomTabInset,
-  Colors,
-  MaxContentWidth,
-  Spacing,
-} from "@/constants/theme";
-import { useTheme } from "@react-navigation/native";
-import { Stack } from "expo-router";
+import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
 import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Accounts() {
   const safeAreaInsets = useSafeAreaInsets();
