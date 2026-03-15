@@ -11,7 +11,7 @@ export default function AllocationsLayout() {
           headerTitle: "Allocations",
         }}
       />
-      <Stack.Screen name="new" />
+      <Stack.Screen name="new-allocation" />
     </Stack>
   );
 }
