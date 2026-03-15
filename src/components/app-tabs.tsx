@@ -1,8 +1,7 @@
 import { Colors } from "@/constants/theme";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { useColorScheme } from "react-native";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons"; // ✅ Import específico
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function AppTabs() {
   const scheme = useColorScheme();
