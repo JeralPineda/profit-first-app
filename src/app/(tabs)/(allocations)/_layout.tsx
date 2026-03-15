@@ -6,7 +6,7 @@ export default function AllocationsLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: true,
+          headerShown: false,
           headerLargeTitle: true,
           headerTitle: "Allocations",
         }}

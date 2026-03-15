@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
-import { StyleSheet, Text, useColorScheme, View } from "react-native";
+import { StyleSheet, useColorScheme, View } from "react-native";
+import { ThemedText } from "./themed-text";
 
 export default function AccountListItem() {
   const scheme = useColorScheme();
@@ -7,9 +8,11 @@ export default function AccountListItem() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={styles.name}>Profit</Text>
-      <Text style={styles.percentage}>10%</Text>
-      <Text style={styles.percentage}>20%</Text>
+      <ThemedText type="smallBold" style={styles.name}>
+        Profit
+      </ThemedText>
+      <ThemedText style={styles.percentage}>10%</ThemedText>
+      <ThemedText style={styles.percentage}>20%</ThemedText>
     </View>
   );
 }
@@ -20,8 +23,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  name: {
-    fontWeight: "bold",
-  },
+  name: {},
   percentage: {},
 });

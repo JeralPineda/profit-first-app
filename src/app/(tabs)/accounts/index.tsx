@@ -1,7 +1,8 @@
 import AccountsList from "@/components/accounts-list";
+import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Accounts() {
@@ -11,51 +12,36 @@ export default function Accounts() {
     bottom: safeAreaInsets.bottom + BottomTabInset + Spacing.three,
   };
 
-  const contentPlatformStyle = Platform.select({
-    android: {
-      paddingTop: insets.top,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
-      paddingBottom: insets.bottom,
-    },
-    web: {
-      paddingTop: Spacing.six,
-      paddingBottom: Spacing.four,
-    },
-  });
-
   return (
-    <ScrollView
-      style={[styles.scrollView]}
-      // contentInset={insets}
-      contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}
+    <ThemedView
+      style={[
+        styles.container,
+        { paddingTop: insets.top, paddingBottom: insets.bottom },
+      ]}
     >
-      <ThemedView style={[styles.container, {}]}>
-        <View style={styles.header}>
-          <Text>Name</Text>
-          <Text>Name</Text>
-          <Text>Name</Text>
-        </View>
+      <ThemedText type="subtitle">Accounts</ThemedText>
 
-        <AccountsList />
-      </ThemedView>
-    </ScrollView>
+      <View style={styles.header}>
+        <ThemedText>Name</ThemedText>
+        <ThemedText>CAP</ThemedText>
+        <ThemedText>TAP</ThemedText>
+      </View>
+
+      <AccountsList />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  contentContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
   container: {
     maxWidth: MaxContentWidth,
-    flexGrow: 1,
     padding: 15,
     gap: 5,
+    flex: 1,
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 20,
   },
   header: {
     flexDirection: "row",
