@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/theme";
-import { accountsCollection } from "@/db";
+import database, { accountsCollection } from "@/db";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useState } from "react";
 import {
@@ -18,22 +18,20 @@ export default function FormFooter() {
   const scheme = useColorScheme();
   const colors = Colors[scheme === "unspecified" ? "light" : scheme];
 
-  const addAccount = () => {
-    console.log("Adding account:", name, cap, tap);
-  };
+  const addAccount = async () => {
+    if (name && cap && tap) {
+      await database.write(async () => {
+        await accountsCollection.create((account) => {
+          account.name = name;
+          account.cap = Number.parseFloat(cap);
+          account.tap = Number.parseFloat(tap);
+        });
+      });
 
-  const onRead = async () => {
-    const accounts = await accountsCollection.query().fetch();
-
-    console.log("🚀 form-footer.tsx -> #31 ~ accounts:", accounts);
-
-    // await database.write(async () => {
-    //   await accountsCollection.create((account) => {
-    //     account.name = "Test";
-    //     account.cap = 10.5;
-    //     account.tap = 10.5;
-    //   });
-    // });
+      setName("");
+      setCap("");
+      setTap("");
+    }
   };
 
   return (
@@ -64,8 +62,6 @@ export default function FormFooter() {
       </View>
 
       <Button title="Add Account" onPress={addAccount} />
-
-      <Button title="Read" onPress={onRead} />
     </View>
   );
 }
