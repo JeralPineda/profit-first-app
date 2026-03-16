@@ -1,9 +1,10 @@
 import { Colors } from "@/constants/theme";
+import Account from "@/model/Account";
+import { withObservables } from "@nozbe/watermelondb/react";
 import { StyleSheet, useColorScheme, View } from "react-native";
 import { ThemedText } from "./themed-text";
-import Account from "@/model/Account";
 
-export default function AccountListItem({ account }: { account: Account }) {
+function AccountListItem({ account }: { account: Account }) {
   const scheme = useColorScheme();
   const colors = Colors[scheme === "unspecified" ? "light" : scheme];
 
@@ -17,6 +18,14 @@ export default function AccountListItem({ account }: { account: Account }) {
     </View>
   );
 }
+
+// Sin esto el elemento de la lista no se actualiza
+// si hago un update a un elemento no cambia hasta que recargue debido a que no es reactivo
+const enhance = withObservables(["account"], ({ account }) => ({
+  account,
+}));
+
+export default enhance(AccountListItem);
 
 const styles = StyleSheet.create({
   container: {

@@ -15,7 +15,7 @@ function AccountsList({ accounts }: Props) {
       data={accounts}
       keyExtractor={(item) => item.id}
       contentContainerStyle={{ gap: 5 }}
-      renderItem={(item) => <AccountListItem account={item.item} />}
+      renderItem={({ item }) => <AccountListItem account={item} />}
       ListFooterComponent={() => <FormFooter />}
     />
   );
