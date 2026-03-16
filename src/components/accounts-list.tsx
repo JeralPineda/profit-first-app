@@ -1,21 +1,29 @@
-import { FlatList, StyleSheet } from "react-native";
+import { accountsCollection } from "@/db";
+import Account from "@/model/Account";
+import { withObservables } from "@nozbe/watermelondb/react";
+import { FlatList } from "react-native";
 import AccountListItem from "./account-list-item";
 import FormFooter from "./form-footer";
 
-export default function AccountsList() {
+type Props = {
+  accounts: Account[];
+};
+
+function AccountsList({ accounts }: Props) {
   return (
     <FlatList
-      data={[1, 2, 3, 4, 5]}
-      contentContainerStyle={styles.contentContainer}
-      contentInsetAdjustmentBehavior="automatic"
-      renderItem={() => <AccountListItem />}
+      data={accounts}
+      keyExtractor={(item) => item.id}
+      contentContainerStyle={{ gap: 5 }}
+      renderItem={(item) => <AccountListItem account={item.item} />}
       ListFooterComponent={() => <FormFooter />}
     />
   );
 }
 
-const styles = StyleSheet.create({
-  contentContainer: {
-    gap: 5,
-  },
-});
+// Sin esto aunque se actualice la lista de cuentas, el componente no se actualizara
+const enhance = withObservables([], () => ({
+  accounts: accountsCollection.query(),
+}));
+
+export default enhance(AccountsList);
