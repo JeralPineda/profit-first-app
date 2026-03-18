@@ -2,7 +2,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Colors } from "@/constants/theme";
 import database, { allocationsCollection } from "@/db";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useState } from "react";
 import {
   Button,
@@ -27,6 +27,7 @@ export default function NewAllocation() {
       });
 
       setIncome("");
+      router.back();
     }
   };
 
