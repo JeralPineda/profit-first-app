@@ -1,10 +1,11 @@
-import { Platform } from "react-native";
 import { Database } from "@nozbe/watermelondb";
 import SQLiteAdapter from "@nozbe/watermelondb/adapters/sqlite";
 
-import schema from "./schema";
 import migrations from "./migrations";
+import schema from "./schema";
+
 import Account from "@/model/Account";
+import Allocation from "@/model/Allocation";
 
 // First, create the adapter to the underlying database:
 const adapter = new SQLiteAdapter({
@@ -25,12 +26,10 @@ const adapter = new SQLiteAdapter({
 // Then, make a Watermelon database from it!
 const database = new Database({
   adapter,
-  modelClasses: [
-    // Post, // ⬅️ You'll add Models to Watermelon here
-    Account,
-  ],
+  modelClasses: [Account, Allocation],
 });
 
 export default database;
 
 export const accountsCollection = database.get<Account>("accounts");
+export const allocationsCollection = database.get<Allocation>("allocations");

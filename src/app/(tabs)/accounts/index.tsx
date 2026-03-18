@@ -25,6 +25,7 @@ export default function Accounts() {
         <ThemedText>Name</ThemedText>
         <ThemedText>CAP</ThemedText>
         <ThemedText>TAP</ThemedText>
+        <ThemedText></ThemedText>
       </View>
 
       <AccountsList />
