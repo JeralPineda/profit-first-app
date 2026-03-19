@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Colors } from "@/constants/theme";
-import database, { allocationsCollection } from "@/db";
+import database, { accountsCollection, allocationsCollection } from "@/db";
 import { router, Stack } from "expo-router";
 import { useState } from "react";
 import {
@@ -11,9 +11,15 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+import { withObservables } from "@nozbe/watermelondb/react";
+import Account from "@/model/Account";
 
-export default function NewAllocation() {
-  const [income, setIncome] = useState("");
+interface AllocationItemProps {
+  accounts: Account[];
+}
+
+function NewAllocation({ accounts }: AllocationItemProps) {
+  const [income, setIncome] = useState("0");
 
   const scheme = useColorScheme();
   const colors = Colors[scheme === "unspecified" ? "light" : scheme];
@@ -52,10 +58,27 @@ export default function NewAllocation() {
         />
       </View>
 
+      {accounts.map((account) => (
+        <View key={account.id} style={styles.inputRow}>
+          <ThemedText style={{ flex: 1 }}>
+            {account.name}: {account.cap}%
+          </ThemedText>
+          <ThemedText>
+            ${(Number.parseFloat(income) * account.cap) / 100}
+          </ThemedText>
+        </View>
+      ))}
+
       <Button title="Save" onPress={onSave} />
     </ThemedView>
   );
 }
+
+const onhabce = withObservables([], () => ({
+  accounts: accountsCollection.query(),
+}));
+
+export default onhabce(NewAllocation);
 
 const styles = StyleSheet.create({
   container: {
