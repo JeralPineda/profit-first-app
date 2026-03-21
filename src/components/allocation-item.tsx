@@ -1,13 +1,20 @@
 import { Colors } from "@/constants/theme";
+import AccountAllocation from "@/model/AccountAllocation";
 import Allocation from "@/model/Allocation";
+import { withObservables } from "@nozbe/watermelondb/react";
 import { StyleSheet, useColorScheme, View } from "react-native";
+import AccountAllocationItem from "./account-allocation-item";
 import { ThemedText } from "./themed-text";
 
 interface AllocationItemProps {
   allocation: Allocation;
+  accountAllocations: AccountAllocation[];
 }
 
-function AllocationItem({ allocation }: AllocationItemProps) {
+function AllocationItem({
+  allocation,
+  accountAllocations,
+}: AllocationItemProps) {
   const scheme = useColorScheme();
   const colors = Colors[scheme === "unspecified" ? "light" : scheme];
 
@@ -22,11 +29,25 @@ function AllocationItem({ allocation }: AllocationItemProps) {
           ${allocation?.income}
         </ThemedText>
       </View>
+
+      <View style={{ gap: 5 }}>
+        {accountAllocations.map((item) => (
+          <AccountAllocationItem key={item.id} accountAllocation={item} />
+        ))}
+      </View>
     </View>
   );
 }
 
-export default AllocationItem;
+const enhance = withObservables(
+  ["allocation"],
+  ({ allocation }: { allocation: Allocation }) => ({
+    allocation,
+    accountAllocations: allocation.accountAllocations,
+  }),
+);
+
+export default enhance(AllocationItem);
 
 const styles = StyleSheet.create({
   container: {
@@ -37,6 +58,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 5,
   },
   income: {
     fontSize: 20,

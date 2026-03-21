@@ -1,7 +1,11 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Colors } from "@/constants/theme";
-import database, { accountsCollection, allocationsCollection } from "@/db";
+import database, {
+  accountAllocationsCollection,
+  accountsCollection,
+  allocationsCollection,
+} from "@/db";
 import { router, Stack } from "expo-router";
 import { useState } from "react";
 import {
@@ -27,9 +31,25 @@ function NewAllocation({ accounts }: AllocationItemProps) {
   const onSave = async () => {
     if (income) {
       await database.write(async () => {
-        await allocationsCollection.create((newAllocation) => {
-          newAllocation.income = Number.parseFloat(income);
-        });
+        const allocation = await allocationsCollection.create(
+          (newAllocation) => {
+            newAllocation.income = Number.parseFloat(income);
+          },
+        );
+
+        const account = accounts[0];
+
+        // for each account, save a AccountAllocation
+        await Promise.all(
+          accounts.map((account) =>
+            accountAllocationsCollection.create((item) => {
+              item.account.set(account);
+              item.allocation.set(allocation);
+              item.cap = account.cap;
+              item.amount = (allocation.income * account.cap) / 100;
+            }),
+          ),
+        );
       });
 
       setIncome("");
