@@ -10,7 +10,10 @@ import {
 export default class Allocation extends Model {
   static table = "allocations";
   static associations = {
-    account_allocations: { type: "has_many", foreignKey: "allocation_id" },
+    account_allocations: {
+      type: "has_many" as const,
+      foreignKey: "allocation_id",
+    },
   };
 
   @field("income") income!: number;

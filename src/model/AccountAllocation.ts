@@ -10,8 +10,8 @@ import {
 export default class AccountAllocation extends Model {
   static table = "account_allocations";
   static associations = {
-    allocations: { type: "belongs_to", key: "allocation_id" },
-    accounts: { type: "belongs_to", key: "account_id" },
+    allocations: { type: "belongs_to" as const, key: "allocation_id" },
+    accounts: { type: "belongs_to" as const, key: "account_id" },
   };
 
   @readonly @field("created_at") createdAt!: number;
