@@ -1,5 +1,5 @@
 import { Model } from "@nozbe/watermelondb";
-import { text, field } from "@nozbe/watermelondb/decorators";
+import { text, field, nochange } from "@nozbe/watermelondb/decorators";
 
 export default class Account extends Model {
   static table = "accounts";
@@ -7,4 +7,6 @@ export default class Account extends Model {
   @text("name") name!: string;
   @field("cap") cap!: number;
   @field("tap") tap!: number;
+
+  @nochange @field("user_id") userId!: string;
 }

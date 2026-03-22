@@ -1,30 +1,27 @@
 import { Colors } from "@/constants/theme";
 import database, { accountsCollection } from "@/db";
+import { useAuth } from "@/providers/auth-provider";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useState } from "react";
-import {
-  Button,
-  StyleSheet,
-  TextInput,
-  useColorScheme,
-  View,
-} from "react-native";
+import { Button, StyleSheet, TextInput, useColorScheme, View } from "react-native";
 
 export default function FormFooter() {
   const [name, setName] = useState("");
   const [cap, setCap] = useState("");
   const [tap, setTap] = useState("");
 
+  const { user } = useAuth();
   const scheme = useColorScheme();
   const colors = Colors[scheme === "unspecified" ? "light" : scheme];
 
   const addAccount = async () => {
-    if (name && cap && tap) {
+    if (name && cap && tap && user) {
       await database.write(async () => {
         await accountsCollection.create((account) => {
           account.name = name;
           account.cap = Number.parseFloat(cap);
           account.tap = Number.parseFloat(tap);
+          account.userId = user.id;
         });
       });
 

@@ -1,22 +1,13 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Colors } from "@/constants/theme";
-import database, {
-  accountAllocationsCollection,
-  accountsCollection,
-  allocationsCollection,
-} from "@/db";
+import database, { accountAllocationsCollection, accountsCollection, allocationsCollection } from "@/db";
+import Account from "@/model/Account";
+import { useAuth } from "@/providers/auth-provider";
+import { withObservables } from "@nozbe/watermelondb/react";
 import { router, Stack } from "expo-router";
 import { useState } from "react";
-import {
-  Button,
-  StyleSheet,
-  TextInput,
-  useColorScheme,
-  View,
-} from "react-native";
-import { withObservables } from "@nozbe/watermelondb/react";
-import Account from "@/model/Account";
+import { Button, StyleSheet, TextInput, useColorScheme, View } from "react-native";
 
 interface AllocationItemProps {
   accounts: Account[];
@@ -25,21 +16,18 @@ interface AllocationItemProps {
 function NewAllocation({ accounts }: AllocationItemProps) {
   const [income, setIncome] = useState("0");
 
+  const { user } = useAuth();
   const scheme = useColorScheme();
   const colors = Colors[scheme === "unspecified" ? "light" : scheme];
 
   const onSave = async () => {
-    if (income) {
+    if (income && user) {
       await database.write(async () => {
-        const allocation = await allocationsCollection.create(
-          (newAllocation) => {
-            newAllocation.income = Number.parseFloat(income);
-          },
-        );
+        const allocation = await allocationsCollection.create((newAllocation) => {
+          newAllocation.income = Number.parseFloat(income);
+          newAllocation.userId = user.id;
+        });
 
-        const account = accounts[0];
-
-        // for each account, save a AccountAllocation
         await Promise.all(
           accounts.map((account) =>
             accountAllocationsCollection.create((item) => {
@@ -47,6 +35,7 @@ function NewAllocation({ accounts }: AllocationItemProps) {
               item.allocation.set(allocation);
               item.cap = account.cap;
               item.amount = (allocation.income * account.cap) / 100;
+              item.userId = user.id;
             }),
           ),
         );
@@ -69,10 +58,7 @@ function NewAllocation({ accounts }: AllocationItemProps) {
           value={income}
           onChangeText={setIncome}
           placeholder="$123"
-          style={[
-            styles.input,
-            { color: colors.text, backgroundColor: colors.background },
-          ]}
+          style={[styles.input, { color: colors.text, backgroundColor: colors.background }]}
           keyboardType="numeric"
           returnKeyType="done"
         />
@@ -83,9 +69,7 @@ function NewAllocation({ accounts }: AllocationItemProps) {
           <ThemedText style={{ flex: 1 }}>
             {account.name}: {account.cap}%
           </ThemedText>
-          <ThemedText>
-            ${(Number.parseFloat(income) * account.cap) / 100}
-          </ThemedText>
+          <ThemedText>${(Number.parseFloat(income) * account.cap) / 100}</ThemedText>
         </View>
       ))}
 
