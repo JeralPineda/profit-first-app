@@ -14,6 +14,26 @@ import {
 export default schemaMigrations({
   migrations: [
     {
+      toVersion: 3,
+      steps: [
+        addColumns({
+          table: "accounts",
+          columns: [
+            { name: "created_at", type: "number" },
+            { name: "updated_at", type: "number" },
+          ],
+        }),
+        addColumns({
+          table: "allocations",
+          columns: [{ name: "updated_at", type: "number" }],
+        }),
+        addColumns({
+          table: "account_allocations",
+          columns: [{ name: "updated_at", type: "number" }],
+        }),
+      ],
+    },
+    {
       toVersion: 2,
       steps: [
         addColumns({
