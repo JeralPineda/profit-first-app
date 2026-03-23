@@ -1,5 +1,6 @@
 import { Database } from "@nozbe/watermelondb";
 import SQLiteAdapter from "@nozbe/watermelondb/adapters/sqlite";
+import * as Crypto from "expo-crypto";
 
 import migrations from "./migrations";
 import schema from "./schema";
@@ -7,6 +8,9 @@ import schema from "./schema";
 import Account from "@/model/Account";
 import AccountAllocation from "@/model/AccountAllocation";
 import Allocation from "@/model/Allocation";
+import { setGenerator } from "@nozbe/watermelondb/utils/common/randomId";
+
+setGenerator(() => Crypto.randomUUID());
 
 // First, create the adapter to the underlying database:
 const adapter = new SQLiteAdapter({
@@ -34,4 +38,6 @@ export default database;
 
 export const accountsCollection = database.get<Account>("accounts");
 export const allocationsCollection = database.get<Allocation>("allocations");
-export const accountAllocationsCollection = database.get<AccountAllocation>("account_allocations");
+export const accountAllocationsCollection = database.get<AccountAllocation>(
+  "account_allocations",
+);
